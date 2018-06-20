@@ -19,27 +19,31 @@ public class SpringbootSqlDemo implements CommandLineRunner{
   PersonRepository personRepository;
   
   public void run(String... args) {
+	  
+	logger.info("======== Using JDBCTemplate for insert and find");
     Person person = new Person();
-    person.setFirstName("FName");
-    person.setLastName("LName");
-    person.setAge(20);
-    person.setPlace("Place");
+    person.setFirstName("Sam");
+    person.setLastName("Neil");
+    person.setAge(26);
+    person.setPlace("LA");
+	int genId = personService.addPerson(person);
     
-    if ( personService.addPerson(person) > 0){
-      logger.info("Person saved successfully");
+    if ( genId > 0){
+	  person.setId(genId);
+      logger.info("======== Person with ID: " + person.getId() + " saved successfully");
     }
     
     for(Person p : personService.getAllPerson()){
-      logger.info(p.toString());
+      logger.info("======== Found Person: " + p.toString());
     }
     
-    logger.info("Using JPA for insert and find");
-    PersonEntity personEntity = new PersonEntity("fName2", "lName2", 24, "Bangalore");
+    logger.info("======== Using JPA for insert and find");
+    PersonEntity personEntity = new PersonEntity("Neil", "Armweak", 36, "Kathmandu");
     personEntity = personRepository.save(personEntity);
-    logger.info("Person with ID: " + personEntity.getId() + " saved successfully");
+    logger.info("======== Person with ID: " + personEntity.getId() + " saved successfully");
     
     for ( PersonEntity pEntity : personRepository.findAll()){
-      logger.info(pEntity.toString());
+      logger.info("======== Found Person: " + pEntity.toString());
     }
   }
   
